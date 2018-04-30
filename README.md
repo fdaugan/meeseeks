@@ -1,7 +1,6 @@
 # Meeseeks (simple tasks!)
+<img align="right" width="25%" src="docs/meeseeks.png">
 A Spring Boot application designed to test a container by simulating memory, CPU, kill, etc. behaviors
-
-![Mr. Meeseeks](docs/meeseeks.png)
 
 # Build
 ```
@@ -16,13 +15,14 @@ docker run --rm -d --name meeseeks -p 8080:8080 -p 9010:9010 fabdouglas/meeseeks
 
 # Simple tasks
 All tasks use `GET` and have default values when parameters are not provided.
-[Echo /api/echo?m=Hello](http://localhost:8080/echo)  
-[Sleep a thread /api/kill?millis=1000](http://localhost:8080/sleep)  
-[100% CPU a thread /api/cpu?millis=1000](http://localhost:8080/cpu)  
-[Counter in the context /api/counter](http://localhost:8080/counter)  
-[Counter in the JVM /api/counter-static](http://localhost:8080/counter-static)  
-[Restart context /api/restart](http://localhost:8080/restart)  
-[Exit /api/kill?code=1](http://localhost:8080/exit)  
+
+Echo [/api/echo?m=Hello](http://localhost:8080/echo)  
+Sleep a thread [/api/kill?millis=1000](http://localhost:8080/sleep)  
+100% CPU a thread [/api/cpu?millis=1000](http://localhost:8080/cpu)  
+Counter in the context [/api/counter](http://localhost:8080/counter)  
+Counter in the JVM [/api/counter-static](http://localhost:8080/counter-static)  
+Restart context [/api/restart](http://localhost:8080/restart)  
+Exit [/api/kill?code=1](http://localhost:8080/exit)  
 
 # Endpoints
 [API](http://localhost:8080/api)  
