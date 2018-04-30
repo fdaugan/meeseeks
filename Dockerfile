@@ -1,36 +1,62 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:10-jre-slim
+LABEL maintainer "fabrice.daugan@gmail.com"
 
-RUN apk add --no-cache tini
+ARG GROUP_ID="org.fabdouglas.meeseeks"
+ARG ARTIFACT_ID="devops-material-spring"
+ARG NEXUS_HOST="oss.sonatype.org"
+ARG VERSION="1.0.0"
+ARG NEXUS_URL="https://${NEXUS_HOST}"
+ARG WAR="${NEXUS_URL}/service/local/artifact/maven/redirect?r=public&g=${GROUP_ID}&a=${ARTIFACT_ID}&v=${VERSION}&p=jar"
 
-ARG JAR_FILE
-ENV JAR_FILE spring-boot.jar
+RUN set -xe \
+  apt-get update && \
+  apt-get update --fix-missing && \
+  apt-get -y install curl
 
-ENV SERVER_PORT=8080
-ENV DEBUG_PORT=8000
-ENV JMX_PORT=9010
-ENV APP_HOME /app
-ENV SPRING_BOOT_USER spring-boot
-ENV SPRING_BOOT_GROUP spring-boot
-
-WORKDIR $APP_HOME
-COPY assets/entrypoint.sh $APP_HOME/entrypoint.sh
-
-# Is this necessary?
-VOLUME /tmp
-
-RUN addgroup -S $SPRING_BOOT_USER && \
-  adduser -S -g $SPRING_BOOT_GROUP $SPRING_BOOT_USER && \
-  chmod 555 $APP_HOME/entrypoint.sh
+ENV CONTEXT_URL="/" \
+    APP_HOME="/usr/local/app" \
+    SERVER_PORT=8080 \
+    SERVER_HOST="0.0.0.0" \
+    JMX_PORT=9010
+ENV JMX_OPTS=" -Dcom.sun.management.jmxremote \
+      -Dcom.sun.management.jmxremote.port=$JMX_PORT \
+      -Dcom.sun.management.jmxremote.local.only=false \
+      -Dcom.sun.management.jmxremote.authenticate=false \
+      -Dcom.sun.management.jmxremote.ssl=false"
 
 EXPOSE $SERVER_PORT
-EXPOSE $DEBUG_PORT
 EXPOSE $JMX_PORT
 
-USER $SPRING_BOOT_USER
-# Add Maven dependencies (not shaded into the artifact; Docker-cached)
-ADD target/lib $APP_HOME/lib
-ADD target/${JAR_FILE} $APP_HOME/${JAR_FILE}
+ADD ${WAR} "${APP_HOME}/app.jar"
+ADD src/test/resources/app.policy "${APP_HOME}/app.policy"
 
-ENTRYPOINT ["/sbin/tini", "--"]
+WORKDIR "${APP_HOME}"
 
-CMD ["./entrypoint.sh"]
+CMD mkdir -p "${APP_HOME}" && \
+  java $JAVA_MEMORY $JAVA_OPTIONS $CUSTOM_OPTS $JMX_OPTS \
+    --add-opens java.base/jdk.internal.loader=ALL-UNNAMED \
+    --add-opens java.base/jdk.internal.module=ALL-UNNAMED \
+    --add-opens java.base/jdk.internal.ref=ALL-UNNAMED \
+    --add-opens java.base/jdk.internal.util.jar=ALL-UNNAMED \
+    --add-opens java.base/jdk.internal.ref=ALL-UNNAMED \
+    --add-opens java.base/jdk.internal.perf=ALL-UNNAMED \
+    --add-opens java.base/jdk.internal.reflect=ALL-UNNAMED \
+    --add-opens java.base/java.lang=ALL-UNNAMED \
+    --add-opens java.base/java.lang.package=ALL-UNNAMED \
+    --add-opens java.base/java.lang.module=ALL-UNNAMED \
+    --add-opens java.base/java.util=ALL-UNNAMED \
+    --add-opens java.base/jdk.internal.math=ALL-UNNAMED \
+    --add-opens java.xml/jdk.xml.internal=ALL-UNNAMED \
+    --add-opens java.xml/javax.xml.catalog=ALL-UNNAMED \
+    --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED \
+    --add-opens jdk.management.jfr/jdk.management.jfr=ALL-UNNAMED \
+    -Djavax.net.ssl.trustStorePassword=changeit \
+    -Dserver.address="${SERVER_HOST}" \
+    -Djava.security.policy="${APP_HOME}/app.policy" \
+    -Dserver.port="${SERVER_PORT}" \
+    -Djava.net.preferIPv4Stack=true \
+    -Dserver.servlet.context-path="${CONTEXT_URL}" \
+    -jar "${APP_HOME}/app.jar"
+
+HEALTHCHECK --interval=10s --timeout=1s --retries=5 --start-period=10s \
+CMD curl --fail http://localhost:${SERVER_PORT}${CONTEXT_URL}/manage/health || exit 1
