@@ -93,6 +93,14 @@
 				<artifactId>springfox-swagger-ui</artifactId>
 				<version>${springfox-swagger.version}</version>
 			</dependency>
+
+			<!-- runtime dependencies -->
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-core</artifactId>
+				<version>5.5.3</version>
+				<scope>runtime</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
