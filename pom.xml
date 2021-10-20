@@ -97,8 +97,8 @@
 			<!-- runtime dependencies -->
 			<dependency>
 				<groupId>org.springframework.security</groupId>
-				<artifactId>spring-security-core</artifactId>
-				<version>5.5.3</version>
+				<artifactId>spring-security-crypto</artifactId>
+				<version>4.2.5.RELEASE</version>
 				<scope>runtime</scope>
 			</dependency>
 		</dependencies>
