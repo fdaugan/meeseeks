@@ -99,8 +99,8 @@ public class MeeseeksResource {
 		final long start = System.currentTimeMillis();
 		// allocate memory
 		ArrayList<String> mem = new ArrayList<String>();
-		for(long i; i<nb; i++) {
-			for(int j; j<100; j++) {
+		for(long i=0L; i<nb; i++) {
+			for(int j=0; j<100; j++) {
 				mem.add(new String("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
 			}
 		}
