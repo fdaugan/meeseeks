@@ -3,6 +3,7 @@
  */
 package org.fabdouglas.meeseeks;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,23 @@ public class MeeseeksResource {
 		final Thread restartThread = new Thread(() -> restartEndpoint.restart(), "Restart");
 		restartThread.setDaemon(false);
 		restartThread.start();
+	}
+
+	@GetMapping("mem")
+	@ResponseBody
+	public void mem(@RequestParam(name = "millis", required = false, defaultValue = "1000") long millis, @RequestParam(name = "nb", required = false, defaultValue = "1000") long nb)
+			throws InterruptedException {
+		final long start = System.currentTimeMillis();
+		// allocate memory
+		ArrayList<String> mem = new ArrayList<String>();
+		for(long i; i<nb; i++) {
+			for(int j; j<100; j++) {
+				mem.add(new String("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
+			}
+		}
+		while (System.currentTimeMillis() - start < millis) {
+			// Nothing to do
+		}
 	}
 
 }
