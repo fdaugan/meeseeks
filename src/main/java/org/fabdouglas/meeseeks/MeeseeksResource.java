@@ -5,6 +5,7 @@ package org.fabdouglas.meeseeks;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
@@ -94,7 +95,7 @@ public class MeeseeksResource {
 
 	@GetMapping("mem")
 	@ResponseBody
-	public void mem(@RequestParam(name = "millis", required = false, defaultValue = "1000") long millis, @RequestParam(name = "nb", required = false, defaultValue = "1000") long nb)
+	public void mem(@RequestParam(name = "secs", required = false, defaultValue = "60") long secs, @RequestParam(name = "nb", required = false, defaultValue = "1000") long nb)
 			throws InterruptedException {
 		// allocate memory
 		ArrayList<String> mem = new ArrayList<String>();
@@ -103,10 +104,7 @@ public class MeeseeksResource {
 				mem.add(new String("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
 			}
 		}
-		final long start = System.currentTimeMillis();
-		while (System.currentTimeMillis() - start < millis) {
-			// Nothing to do
-		}
+		TimeUnit.SECONDS.sleep(secs);
 	}
 
 }
