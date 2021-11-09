@@ -96,7 +96,6 @@ public class MeeseeksResource {
 	@ResponseBody
 	public void mem(@RequestParam(name = "millis", required = false, defaultValue = "1000") long millis, @RequestParam(name = "nb", required = false, defaultValue = "1000") long nb)
 			throws InterruptedException {
-		final long start = System.currentTimeMillis();
 		// allocate memory
 		ArrayList<String> mem = new ArrayList<String>();
 		for(long i=0L; i<nb; i++) {
@@ -104,6 +103,7 @@ public class MeeseeksResource {
 				mem.add(new String("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
 			}
 		}
+		final long start = System.currentTimeMillis();
 		while (System.currentTimeMillis() - start < millis) {
 			// Nothing to do
 		}
