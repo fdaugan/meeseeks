@@ -95,15 +95,18 @@ public class MeeseeksResource {
 
 	@GetMapping("mem")
 	@ResponseBody
-	public void mem(@RequestParam(name = "secs", required = false, defaultValue = "60") long secs, @RequestParam(name = "nb", required = false, defaultValue = "1000") long nb)
+	public void mem(@RequestParam(name = "secs", required = false, defaultValue = "60") long secs, @RequestParam(name = "nb_kilobytes", required = false, defaultValue = "1000") long nb)
 			throws InterruptedException {
 		// allocate memory
 		ArrayList<String> mem = new ArrayList<String>();
 		for(long i=0L; i<nb; i++) {
-			for(int j=0; j<100; j++) {
-				mem.add(new String("0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"));
+			// allocate about 1K of memory
+			for(int j=0; j<20; j++) {
+				// 43 bytes + 8 bytes for reference
+				mem.add(new String("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123"));
 			}
 		}
+		// keep the memory for some time
 		TimeUnit.SECONDS.sleep(secs);
 	}
 
