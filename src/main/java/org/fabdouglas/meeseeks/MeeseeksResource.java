@@ -99,6 +99,7 @@ public class MeeseeksResource {
 			throws InterruptedException {
 		// allocate memory
 		ArrayList<String> mem = new ArrayList<String>();
+		System.out.println("Allocate about " + nb + " Kilobytes of RAM");
 		for(long i=0L; i<nb; i++) {
 			// allocate about 1K of memory
 			for(int j=0; j<20; j++) {
@@ -107,6 +108,7 @@ public class MeeseeksResource {
 			}
 		}
 		// keep the memory for some time
+		System.out.println("Sleeping for " + millis + " milliseconds");
 		TimeUnit.MILLISECONDS.sleep(millis);
 	}
 
