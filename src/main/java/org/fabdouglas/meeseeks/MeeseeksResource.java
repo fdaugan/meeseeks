@@ -95,7 +95,7 @@ public class MeeseeksResource {
 
 	@GetMapping("mem")
 	@ResponseBody
-	public void mem(@RequestParam(name = "secs", required = false, defaultValue = "60") long secs, @RequestParam(name = "nb_kilobytes", required = false, defaultValue = "1000") long nb)
+	public void mem(@RequestParam(name = "millis", required = false, defaultValue = "1000") long millis, @RequestParam(name = "nb_kilobytes", required = false, defaultValue = "1000") long nb)
 			throws InterruptedException {
 		// allocate memory
 		ArrayList<String> mem = new ArrayList<String>();
@@ -107,7 +107,7 @@ public class MeeseeksResource {
 			}
 		}
 		// keep the memory for some time
-		TimeUnit.SECONDS.sleep(secs);
+		TimeUnit.MILLISECONDS.sleep(millis);
 	}
 
 }
