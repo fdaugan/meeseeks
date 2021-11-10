@@ -95,12 +95,12 @@ public class MeeseeksResource {
 
 	@GetMapping("mem")
 	@ResponseBody
-	public void mem(@RequestParam(name = "millis", required = false, defaultValue = "1000") long millis, @RequestParam(name = "nb_kilobytes", required = false, defaultValue = "1000") long nb)
+	public void mem(@RequestParam(name = "millis", required = false, defaultValue = "1000") long millis, @RequestParam(name = "nb_kilobytes", required = false, defaultValue = "1000") long nb_kilobytes)
 			throws InterruptedException {
 		// allocate memory
 		ArrayList<String> mem = new ArrayList<String>();
-		System.out.println("Allocate about " + nb + " Kilobytes of RAM");
-		for(long i=0L; i<nb; i++) {
+		System.out.println("Allocate about " + nb_kilobytes + " Kilobytes of RAM");
+		for(long i=0L; i<nb_kilobytes; i++) {
 			// allocate about 1K of memory
 			for(int j=0; j<20; j++) {
 				// 43 bytes + 8 bytes for reference
