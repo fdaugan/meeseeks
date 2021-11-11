@@ -3,7 +3,9 @@
  */
 package org.fabdouglas.meeseeks;
 
+import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
@@ -89,6 +91,25 @@ public class MeeseeksResource {
 		final Thread restartThread = new Thread(() -> restartEndpoint.restart(), "Restart");
 		restartThread.setDaemon(false);
 		restartThread.start();
+	}
+
+	@GetMapping("mem")
+	@ResponseBody
+	public void mem(@RequestParam(name = "millis", required = false, defaultValue = "1000") long millis, @RequestParam(name = "nb_kilobytes", required = false, defaultValue = "1000") long nb_kilobytes)
+			throws InterruptedException {
+		// allocate memory
+		ArrayList<String> mem = new ArrayList<String>();
+		System.out.println("Allocate about " + nb_kilobytes + " Kilobytes of RAM");
+		for(long i=0L; i<nb_kilobytes; i++) {
+			// allocate about 1K of memory
+			for(int j=0; j<20; j++) {
+				// 43 bytes + 8 bytes for reference
+				mem.add(new String("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123"));
+			}
+		}
+		// keep the memory for some time
+		System.out.println("Sleeping for " + millis + " milliseconds");
+		TimeUnit.MILLISECONDS.sleep(millis);
 	}
 
 }

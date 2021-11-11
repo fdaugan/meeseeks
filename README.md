@@ -19,6 +19,7 @@ All tasks use `GET` and have default values when parameters are not provided.
 Echo [/api/echo?m=Hello](http://localhost:8080/echo)  
 Sleep a thread [/api/kill?millis=1000](http://localhost:8080/sleep)  
 100% CPU a thread [/api/cpu?millis=1000](http://localhost:8080/cpu)  
+1M of Memory a thread [/api/mem?millis=1000&nb_kilobytes=1000](http://localhost:8080/mem)  
 Counter in the context [/api/counter](http://localhost:8080/counter)  
 Counter in the JVM [/api/counter-static](http://localhost:8080/counter-static)  
 Restart context [/api/restart](http://localhost:8080/restart)  
