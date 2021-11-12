@@ -1,4 +1,4 @@
-FROM openjdk:10-jre-slim
+FROM openjdk:17.0.1-slim
 LABEL maintainer "fabrice.daugan@gmail.com"
 
 ARG GROUP_ID="org.fabdouglas.meeseeks"
