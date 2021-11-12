@@ -24,6 +24,8 @@ Counter in the context [/api/counter](http://localhost:8080/api/counter)
 Counter in the JVM [/api/counter-static](http://localhost:8080/api/counter-static)  
 Restart context [/api/restart](http://localhost:8080/api/restart)  
 Exit [/api/kill?code=1](http://localhost:8080/api/exit)  
+Open a file and keep the handle [/api/file-open?files=1024](http://localhost:8080/api/file-open?files=1024)  
+Close and release one opened file [/api/file-close?files=1024](http://localhost:8080/api/file-close?files=1024)  
 
 # Endpoints
 [API](http://localhost:8080/api)  

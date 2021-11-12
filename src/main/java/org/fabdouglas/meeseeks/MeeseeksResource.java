@@ -3,9 +3,14 @@
  */
 package org.fabdouglas.meeseeks;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.restart.RestartEndpoint;
@@ -23,6 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MeeseeksResource {
 
 	private final AtomicLong counter = new AtomicLong();
+
+	private final static Queue<FileInputStream> openedFiles = new LinkedList<>();
 
 	/**
 	 * Shared thread safe counter.
@@ -51,6 +58,36 @@ public class MeeseeksResource {
 	public long counter() {
 		System.out.println("Increment and get counter");
 		return counter.incrementAndGet();
+	}
+
+	/**
+	 * Open new files and return current opened files count.
+	 * 
+	 * @return opened files count.
+	 */
+	@GetMapping("file-open")
+	@ResponseBody
+	public long fileOpen(@RequestParam(name = "files", required = false, defaultValue = "1") int nb)
+			throws FileNotFoundException {
+		System.out.println("Create " + nb + " new file handles");
+		for (var files = nb; files-- > 0;) {
+			openedFiles.add(new FileInputStream("/usr/local/app/app.jar"));
+		}
+		return openedFiles.size();
+	}
+
+	/**
+	 * Close the last opened files and return current opened files count.
+	 */
+	@GetMapping("file-close")
+	@ResponseBody
+	public long fileClose(@RequestParam(name = "files", required = false, defaultValue = "1") int nb)
+			throws IOException {
+		System.out.println("Create a new file handle");
+		for (var files = nb; files-- > 0;) {
+			openedFiles.poll().close();
+		}
+		return openedFiles.size();
 	}
 
 	@GetMapping("counter-static")
