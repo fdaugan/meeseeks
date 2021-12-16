@@ -3,7 +3,8 @@ WORKDIR /build/
 ADD . .
 RUN mvn clean package -B -q -Dmaven.test.skip=true
 
-FROM openjdk:17.0.1-slim
+FROM openjdk:17.0.1-alpine
+
 LABEL maintainer "fabrice.daugan@gmail.com"
 
 RUN set -xe \
@@ -28,7 +29,7 @@ ENV JMX_OPTS=" -Dcom.sun.management.jmxremote \
 EXPOSE $SERVER_PORT
 EXPOSE $JMX_PORT
 
-COPY --from=builder /build/target/*.war ${SERVER_HOME}/app.war
+COPY --from=builder /build/target/*.war ${APP_HOME}/app.war
 ADD src/test/resources/app.policy "${APP_HOME}/app.policy"
 
 WORKDIR "${APP_HOME}"
