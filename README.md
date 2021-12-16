@@ -4,8 +4,7 @@ A Spring Boot application designed to test a container by simulating memory, CPU
 
 # Build
 ```
-mvn package -Dmaven.test.skip=true
-docker build -t fabdouglas/meeseeks:1.0.0 --build-arg WAR="target/app.jar" .
+docker build -t fabdouglas/meeseeks:1.0.0" .
 ```
 
 # Run

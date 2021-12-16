@@ -1,12 +1,10 @@
+FROM maven:3.8.4-openjdk-17 as builder
+WORKDIR /build/
+ADD . .
+RUN mvn clean package -B -q -Dmaven.test.skip=true
+
 FROM openjdk:17.0.1-slim
 LABEL maintainer "fabrice.daugan@gmail.com"
-
-ARG GROUP_ID="org.fabdouglas.meeseeks"
-ARG ARTIFACT_ID="devops-material-spring"
-ARG NEXUS_HOST="oss.sonatype.org"
-ARG VERSION="1.0.0"
-ARG NEXUS_URL="https://${NEXUS_HOST}"
-ARG WAR="${NEXUS_URL}/service/local/artifact/maven/redirect?r=public&g=${GROUP_ID}&a=${ARTIFACT_ID}&v=${VERSION}&p=jar"
 
 RUN set -xe \
   apt-get update && \
@@ -17,7 +15,10 @@ ENV CONTEXT_URL="/" \
     APP_HOME="/usr/local/app" \
     SERVER_PORT=8080 \
     SERVER_HOST="0.0.0.0" \
-    JMX_PORT=9010
+    JMX_PORT=9010 \
+    CUSTOM_OPTS="" \
+    JAVA_OPTIONS="" \
+    JAVA_MEMORY=""
 ENV JMX_OPTS=" -Dcom.sun.management.jmxremote \
       -Dcom.sun.management.jmxremote.port=$JMX_PORT \
       -Dcom.sun.management.jmxremote.local.only=false \
@@ -27,7 +28,7 @@ ENV JMX_OPTS=" -Dcom.sun.management.jmxremote \
 EXPOSE $SERVER_PORT
 EXPOSE $JMX_PORT
 
-ADD ${WAR} "${APP_HOME}/app.jar"
+COPY --from=builder /build/target/*.war ${SERVER_HOME}/app.war
 ADD src/test/resources/app.policy "${APP_HOME}/app.policy"
 
 WORKDIR "${APP_HOME}"
