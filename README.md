@@ -4,7 +4,7 @@ A Spring Boot application designed to test a container by simulating memory, CPU
 
 # Build
 ```
-docker build -t fabdouglas/meeseeks:1.0.0" .
+docker build -t "fabdouglas/meeseeks:1.0.0" .
 ```
 
 # Run
