@@ -1,3 +1,8 @@
+FROM maven:3.8.4-openjdk-17 as builder
+WORKDIR /build/
+ADD . .
+RUN mvn clean package -B -q -Dmaven.test.skip=true
+
 FROM openjdk:17.0.1-slim
 LABEL maintainer "fabrice.daugan@gmail.com"
 RUN set -xe \
@@ -22,7 +27,7 @@ ENV JMX_OPTS=" -Dcom.sun.management.jmxremote \
 EXPOSE $SERVER_PORT
 EXPOSE $JMX_PORT
 
-ADD target/app.jar "${APP_HOME}/app.jar"
+COPY --from=builder /build/target/*.jar ${APP_HOME}/app.jar
 ADD src/test/resources/app.policy "${APP_HOME}/app.policy"
 
 WORKDIR "${APP_HOME}"

@@ -2,8 +2,14 @@
 <img align="right" width="25%" src="docs/meeseeks.png">
 A Spring Boot application designed to test a container by simulating memory, CPU, kill, etc. behaviors
 
-# Build
+# Build with Docker
 ```
+docker build -t "fabdouglas/meeseeks:1.0.0" .
+```
+
+# Build with Maven
+```
+mvn clean package -B -q -Dmaven.test.skip=true
 docker build -t "fabdouglas/meeseeks:1.0.0" .
 ```
 
