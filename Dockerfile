@@ -3,7 +3,7 @@ WORKDIR /build/
 ADD . .
 RUN mvn clean package -B -q -Dmaven.test.skip=true
 
-FROM openjdk:17.0.1-alpine
+FROM openjdk:17-jdk-alpine3.14
 
 LABEL maintainer "fabrice.daugan@gmail.com"
 
