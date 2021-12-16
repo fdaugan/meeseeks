@@ -49,6 +49,9 @@
 		<springfox-swagger.version>2.8.0</springfox-swagger.version>
 		<jaxws.version>2.3.0</jaxws.version>
 		<spring-cloud.version>3.0.4</spring-cloud.version>
+    	<lombok.version>1.18.22</lombok.version>
+		<slf4j.version>1.7.32</slf4j.version>
+		<log4j.version>2.16.0</log4j.version>
 	</properties>
 
 	<dependencyManagement>
@@ -80,6 +83,38 @@
 				<version>${spring-cloud.version}</version>
 			</dependency>
 
+			<dependency>
+	        	<groupId>org.projectlombok</groupId>
+	        	<artifactId>lombok</artifactId>
+	        	<version>${lombok.version}</version>
+	        	<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-slf4j-impl</artifactId>
+				<version>${log4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+
 			<!-- swagger -->
 			<dependency>
 				<groupId>io.springfox</groupId>
@@ -97,6 +132,35 @@
 
 
 	<dependencies>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-slf4j-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+		</dependency>
+		<dependency>
+        	<groupId>org.projectlombok</groupId>
+        	<artifactId>lombok</artifactId>
+        	<scope>provided</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-context</artifactId>
@@ -105,6 +169,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
+				<exclusion>
+					<groupId>org.apache.logging.log4j</groupId>
+					<artifactId>log4j-to-slf4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
